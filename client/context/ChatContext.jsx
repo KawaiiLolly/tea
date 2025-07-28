@@ -16,23 +16,23 @@ export const ChatProvider = ({ children }) => {
 
     // FUNCTION TO GET ALL USER FOR SIDEBAR
     const getUsers = async () => {
-    try {
-        const { data } = await axios.get("/api/messages/users", {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
+        try {
+            const { data } = await axios.get("/api/messages/users", {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
 
-        if (data.success) {
-            console.log("Users fetched:", data.users)
-            setUsers(data.users)
-            setUnseenMessages(data.unseenMessages)
+            if (data.success) {
+                console.log("Users fetched:", data.users)
+                setUsers(data.users)
+                setUnseenMessages(data.unseenMessages)
+            }
+        } catch (error) {
+            toast.error(error.message)
+            console.log("getUsers error:", error)
         }
-    } catch (error) {
-        toast.error(error.message)
-        console.log("getUsers error:", error)
     }
-}
 
 
     // FUNCTION TO GET ALL MESSAGES FROM A USER
@@ -53,48 +53,54 @@ export const ChatProvider = ({ children }) => {
     }
 
     // FUNCNTION TO SEND THE MESSAGE
+    // sendMessage function (ONLY send once)
     const sendMessage = async (messageData) => {
         try {
             const { data } = await axios.post(`/api/messages/send/${selectedUser._id}`, messageData, {
-                headers: {
-                    token: token
-                }
+                headers: { token },
+            });
 
-            })
             if (data.success) {
-                setMessages((prevMessages) => [...prevMessages, data.newMessage])
+                // ✅ Update UI instantly
+                setMessages((prev) => [...prev, data.newMessage]);
 
+                // ✅ Emit to Socket.IO only once
+                socket.emit("sendMessage", { ...data.newMessage, receiverId: selectedUser._id });
             } else {
-                toast.error(data.message)
+                toast.error(data.message);
             }
         } catch (error) {
-            toast.error(error.message)
-
+            toast.error(error.message);
         }
-    }
+    };
 
-    // FUNC TO SUBSCRIBE TO MESSAGES FOR SELECTED USER
-    const subscribeToMessages = async () => {
+
+
+    // ✅ SUBSCRIBE TO MESSAGES
+    const subscribeToMessages = () => {
         if (!socket) return;
-        socket.on("newMessages", (newMessage) => {
+
+        socket.off("newMessage"); // Clear previous listener to avoid duplicates
+
+        socket.on("newMessage", (newMessage) => {
             if (selectedUser && newMessage.senderId === selectedUser._id) {
                 newMessage.seen = true;
-                setMessages((prevMessages) => [...prevMessages, newMessage])
-                axios.put(`/api/messages/mark/${newMessage._id}`)
+                setMessages((prevMessages) => [...prevMessages, newMessage]);
+                axios.put(`/api/messages/mark/${newMessage._id}`);
             } else {
-                setUnseenMessages((prevUnseenMessages) => (
-                    {
-                        ...prevUnseenMessages, [newMessage.senderId]: prevUnseenMessages[newMessage.senderId] ? prevUnseenMessages[newMessage.senderId] + 1 : 1
-                    }
-                ))
+                setUnseenMessages((prev) => ({
+                    ...prev,
+                    [newMessage.senderId]: prev[newMessage.senderId] ? prev[newMessage.senderId] + 1 : 1
+                }));
             }
-        })
-    }
+        });
+    };
 
-    // FUNC TO UNSUBSCRIBE TO MESSAGES FOR SELECTED USER
+    // ✅ UNSUBSCRIBE TO MESSAGES
     const unsubscribeToMessages = () => {
-        if (socket) socket.off("newMessage")
-    }
+        if (socket) socket.off("newMessage");
+    };
+
 
     useEffect(() => {
         subscribeToMessages()
@@ -102,7 +108,7 @@ export const ChatProvider = ({ children }) => {
     }, [socket, selectedUser])
 
     const value = {
-        messages, users, selectedUser, getUsers, sendMessage, setMessages, setSelectedUser, unseenMessages, setUnseenMessages
+        messages, users, selectedUser, getUsers, sendMessage, getMessages, setSelectedUser, unseenMessages, setUnseenMessages
     }
 
     return (

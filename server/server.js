@@ -22,22 +22,26 @@ export const userSocketMap = {};
 // SOCKET.IO CONNECTION HANDLER
 io.on("connection", (socket) => {
   const userId = socket.handshake.query.userId;
-  console.log("User Connected : ", userId);
-  if(userId) userSocketMap[userId] = socket.id
-//   EMIT ONLINE USERS TO ALL CONNECTED CLIENTS
-    io.emit("getOnlineUsers", Object.keys(userSocketMap))
-    socket.on("disconnect", ()=>{
-        console.log("User Disconnected", userId)
-        delete userSocketMap[userId]
-        io.emit("getOnlineUsers", Object.keys(userSocketMap))
-    })
+  console.log("User Connected:", userId);
+
+  if (userId) userSocketMap[userId] = socket.id;
+
+  // EMIT ONLINE USERS
+  io.emit("getOnlineUsers", Object.keys(userSocketMap));
+
+  // HANDLE DISCONNECT
+  socket.on("disconnect", () => {
+    console.log("User Disconnected:", userId);
+    delete userSocketMap[userId];
+    io.emit("getOnlineUsers", Object.keys(userSocketMap));
+  });
 });
 
 // MIDDLEWARE
 app.use(express.json({ limit: "4mb" }));
 app.use(cors());
 
-// USER ROUTES
+// ROUTES
 app.use("/api/status", (req, res) => res.send("Server is live"));
 app.use("/api/auth", userRouter);
 app.use("/api/messages", messageRouter);
@@ -46,7 +50,6 @@ app.use("/api/messages", messageRouter);
 await connectDB();
 
 const PORT = process.env.PORT || 5000;
-
-server.listen(PORT, () => {
-  console.log(`Server is running at http://localhost:${PORT}`);
-});
+server.listen(PORT, () =>
+  console.log(`Server running at http://localhost:${PORT}`)
+);
