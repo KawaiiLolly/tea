@@ -16,19 +16,23 @@ const LoginPage = () => {
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
-    if (!agreedToPolicy) {
+
+    // ✅ Require privacy policy only for Sign Up (first step)
+    if (currState === "Sign Up" && !isDataSubmitted && !agreedToPolicy) {
       alert("Please agree to the terms and conditions.");
       return;
     }
 
+    // ✅ Handle Sign Up (two-step: basic details then bio)
     if (currState === "Sign Up" && !isDataSubmitted) {
       setIsDataSubmitted(true);
       return;
     }
 
-    // Add actual login/signup logic here
-    login(currState === "Sign Up" ? 'signup' : 'login', {fullName, email, password, bio})
+    // ✅ Proceed to login/signup
+    login(currState === "Sign Up" ? 'signup' : 'login', { fullName, email, password, bio });
   };
+
 
 
   useEffect(() => {
@@ -49,7 +53,7 @@ const LoginPage = () => {
       <img src={assets.logo_big} className='w-[min(30vw, 250px)]' alt="" />
       {/* RIGHT */}
       <form onSubmit={onSubmitHandler} action="" className='border-2 bg-white/8 text-white border-gray-500 p-6 flex flex-col gap-6 rounded-lg shadow-lg'>
-        <h2 className='font-medium text-2xl flex justify-between items-center'>
+        <h2 className='font-medium text-2xl text-center relative'>
           {currState} {isDataSubmitted && <img onClick={() => setIsDataSubmitted(false)} src={assets.arrow_icon} alt="" className='w-5 cursor-pointer' />}
 
         </h2>
@@ -69,28 +73,32 @@ const LoginPage = () => {
           )
         }
 
+        {currState === "Sign Up" && (
+          <div className='flex items-center gap-2 text-sm text-gray-500'>
+            <input
+              type="checkbox"
+              checked={agreedToPolicy}
+              onChange={(e) => setAgreedToPolicy(e.target.checked)}
+            />
+            <p>Agree to the terms of use & privacy policy.</p>
+          </div>
+        )}
+
         <button className='py-3 bg-gradient-to-r from-purple-400 to-violet-600 text-white rounded-md cursor-pointer '>
           {currState === "Sign Up" ? "Create Account" : "Login Now"}
         </button>
 
-        <div className='flex items-center gap-2 text-sm text-gray-500'>
-          <input
-            type="checkbox"
-            checked={agreedToPolicy}
-            onChange={(e) => setAgreedToPolicy(e.target.checked)}
-          />
-          <p>Agree to the terms of use & privacy policy.</p>
-        </div>
+
 
 
         <div className='flex flex-col gap-2'>
           {currState === "Sign Up" ? (
-            <p className='text-sm text-gray-600'>Already have an account? <span onClick={() => {
+            <p className='text-sm text-gray-600 text-center'>Already have an account? <span onClick={() => {
               setCurrState("Login");
               setIsDataSubmitted(false);
             }} className='font-medium text-violet-500 cursor-pointer'>Login Here</span></p>
           ) : (
-            <p className='text-sm text-gray-600'>Create an account <span onClick={() => setCurrState("Sign Up")} className='font-medium text-violet-500 cursor-pointer'>Click here</span></p>
+            <p className='text-sm text-gray-600 text-center'>Create an account <span onClick={() => setCurrState("Sign Up")} className='font-medium text-violet-500 cursor-pointer'>Sign Up here</span></p>
           )}
         </div>
 

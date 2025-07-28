@@ -5,7 +5,7 @@ import { AuthContext } from '../../context/AuthContext'
 
 const RightSideBar = () => {
   const { selectedUser, messages } = useContext(ChatContext)
-  const { logout, onlineUsers } = useContext(AuthContext)
+  const { onlineUsers } = useContext(AuthContext)
   const [msgImages, setMsgImages] = useState([]);
 
   // GET ALL IMAGES FROM THE MESSAGES AND SET THEM TO THE STATE
@@ -34,8 +34,6 @@ const RightSideBar = () => {
           ))}
         </div>
       </div>
-      {/* LOGOUT */}
-      <button onClick={() => logout()} className='absolute bottom-5 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-purple-400 to-violet-600 text-white border-none text-sm font-light py-2 px-20 rounded-full cursor-pointer'>Logout</button>
     </div>
   )
 }
