@@ -1,8 +1,6 @@
 # 🫖 TEA  
 _No secret is safe — spill it all, anytime, anywhere._
 
-![TEA Banner](./src/assets/bg.png) <!-- Replace with actual banner/logo path if needed -->
-
 ---
 
 ## 🚀 Overview  
