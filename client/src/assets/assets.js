@@ -21,6 +21,7 @@ import pic3 from './pic3.png'
 import pic4 from './pic4.png'
 import img1 from './img1.jpg'
 import img2 from './img2.jpg'
+import tea_login from './tea-login.png'
 
 const assets = {
     avatar_icon,
@@ -35,6 +36,7 @@ const assets = {
     arrow_icon,
     code,
     bgImage,
+    tea_login,
     profile_martin
 }
 
