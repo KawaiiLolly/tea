@@ -22,6 +22,14 @@ import pic4 from './pic4.png'
 import img1 from './img1.jpg'
 import img2 from './img2.jpg'
 import tea_login from './tea-login.png'
+import tea_side from './tea-side.png'
+import bg from './bg.png'
+import bg_login from './bg-login.png'
+import right_side from './right-side.png'
+import right_side_white from './right-side-white.png'
+import tea_sidebar from './tea-sidebar.png'
+import tea from './tea.png'
+
 
 const assets = {
     avatar_icon,
@@ -37,7 +45,14 @@ const assets = {
     code,
     bgImage,
     tea_login,
-    profile_martin
+    profile_martin,
+    tea_side,
+    bg,
+    bg_login,
+    right_side,
+    right_side_white,
+    tea_sidebar,
+    tea
 }
 
 export default assets;

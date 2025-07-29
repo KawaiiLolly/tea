@@ -48,11 +48,13 @@ const LoginPage = () => {
 
 
   return (
-    <div className='min-h-screen bg-cover bg-center flex items-center justify-center gap-8 sm:justify-evenly max-sm:flex-col backdrop-blur-2xl'>
+    <div className=' min-h-screen bg-cover bg-center flex items-center justify-center gap-8 sm:justify-evenly max-sm:flex-col'
+      style={{ backgroundImage: `url(${assets.bg-login})` }}>
+        {/* <div className="absolute inset-0 bg-black opacity-50 z-0"></div>  */}
       {/* LEFT */}
-      <img src={assets.logo_big} className='w-[min(30vw, 250px)]' alt="" />
+      <img src={assets.tea} className='w-[550px]' alt="" />
       {/* RIGHT */}
-      <form onSubmit={onSubmitHandler} action="" className='border-2 bg-white/8 text-white border-gray-500 p-6 flex flex-col gap-6 rounded-lg shadow-lg'>
+      <form onSubmit={onSubmitHandler} action="" className='border-2 bg-white/8 text-white border-gray-500 p-6 flex flex-col gap-6 rounded-lg shadow-lg backdrop-blur-xl'>
         <h2 className='font-medium text-2xl text-center relative'>
           {currState} {isDataSubmitted && <img onClick={() => setIsDataSubmitted(false)} src={assets.arrow_icon} alt="" className='w-5 cursor-pointer' />}
 
