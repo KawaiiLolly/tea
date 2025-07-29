@@ -1,6 +1,8 @@
 # 🫖 TEA  
 _No secret is safe — spill it all, anytime, anywhere._
 
+![TEA Banner](./login.png) <!-- Replace with actual banner/logo path if needed -->
+
 ---
 
 ## 🚀 Overview  
@@ -42,11 +44,11 @@ Whether it's private messaging or casual chit-chat, TEA makes communication effo
 
 ## 📷 Screenshots  
 
-### 💻 Login & OTP Verification  
-![Login Page](./screenshots/login.png)
+### 💻 Login & Sign Up
+![Login Page](./login.png)
 
 ### 💬 Chat Interface  
-![Chat Interface](./screenshots/chat.png)
+![Chat Interface](./chat.png)
 
 ---
 
